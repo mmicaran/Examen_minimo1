@@ -38,13 +38,13 @@ public class MyBikeService {
 
     //bikesByStationOrderByKms
     @GET
-    @ApiOperation(value = "bikesByStationOrderByKms", notes = "asdasd")
+    @ApiOperation(value = "GET BIKE BY STATION ORDER BY KMS", notes = "asdasd")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Successful", response = Bike.class, responseContainer="List"),
             @ApiResponse(code = 404, message = "Track not found")
 
     })
-    @Path("/{idStation}")
+    @Path("/getBikeByStationOrderByKms/{idStation}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response bikesByStationOrderByKms(@PathParam("idStation") String idStation)  {
 
@@ -59,6 +59,27 @@ public class MyBikeService {
 
     }
 
+    //bikesByStationOrderByKms
+    @GET
+    @ApiOperation(value = "GET BIKE BY USER", notes = "asdasd")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful", response = Bike.class, responseContainer="List"),
+            @ApiResponse(code = 404, message = "Track not found")
+
+    })
+    @Path("/getBikeByUser/{idUser}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response BikeByUser(@PathParam("idUser") String idUser)  {
+
+        try {
+            List<Bike> bikes = this.mb.bikesByUser(idUser);
+            GenericEntity<List<Bike>> entity = new GenericEntity<List<Bike>>(bikes) {};
+            return Response.status(201).entity(entity).build()  ;
+        } catch (UserNotFoundException e) {
+            return Response.status(404).build();
+        }
+    }
+
     //getBikes
     @GET
     @ApiOperation(value = "Get Bike", notes = "asdasd")
@@ -67,7 +88,7 @@ public class MyBikeService {
             @ApiResponse(code = 404, message = "Track not found")
 
     })
-    @Path("/{idStation}{userId}")
+    @Path("/{idStation}/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBike (@PathParam("idStation") String idStation, @PathParam("userId") String userId)  {
         try {

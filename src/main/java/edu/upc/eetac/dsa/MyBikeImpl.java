@@ -17,7 +17,7 @@ public class MyBikeImpl implements MyBike {
 
     private MyBikeImpl(){
         nStations = 0;
-        this.stations = new Station[10];
+        this.stations = new Station[S];
         this.usuarios = new HashMap<>();
     }
 
@@ -156,16 +156,17 @@ public class MyBikeImpl implements MyBike {
     }
 
     public int numUsers(){
+        log.info("Numero de usuarios: " +usuarios.size());
         return usuarios.size();
     }
 
     public int numStations(){
+        log.info("Numero de estaciones: " +nStations);
         return nStations;
     }
 
     public int numBikes(String idStation) throws StationNotFoundException {
         int i;
-        boolean encontrado = false;
         for (i = 0; i < nStations; i++) {
             if (idStation.equals(stations[i].getIdStation())) {
                 log.info("Estacion encontrada");
@@ -173,13 +174,15 @@ public class MyBikeImpl implements MyBike {
                 return (stations[i].getBicis().size());
             }
         }
+        log.error("Estacion no encontrada");
         throw new StationNotFoundException();
     }
 
     public void clear(){
         nStations = 0;
-        this.stations = new Station[10];
+        this.stations = new Station[S];
         this.usuarios = new HashMap<>();
+        log.info("RESTART!");
     }
 
 
