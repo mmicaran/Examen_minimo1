@@ -1,13 +1,17 @@
 package edu.upc.eetac.dsa;
 
+import java.util.LinkedList;
+
 public class Station {
     String idStation;
     String description;
     int max;
     double lat;
     double lon;
+    LinkedList<Bike> bicis;
 
     public Station() {
+        this.bicis = new LinkedList<>();
     }
 
     public Station(String idStation, String description, int max, double lat, double lon) {
@@ -16,6 +20,7 @@ public class Station {
         this.max = max;
         this.lat = lat;
         this.lon = lon;
+        this.bicis = new LinkedList<>();
     }
 
     public String getIdStation() {
@@ -58,6 +63,18 @@ public class Station {
         this.lon = lon;
     }
 
+    public LinkedList<Bike> getBicis() {
+        return bicis;
+    }
+
+    public void setBicis(LinkedList<Bike> bicis) {
+        this.bicis = bicis;
+    }
+
+    public void addBicis(Bike b){
+        this.getBicis().add(b);
+    }
+
     @Override
     public String toString() {
         return "Station{" +
@@ -66,6 +83,7 @@ public class Station {
                 ", max=" + max +
                 ", lat=" + lat +
                 ", lon=" + lon +
+                ", bicis=" + bicis +
                 '}';
     }
 }

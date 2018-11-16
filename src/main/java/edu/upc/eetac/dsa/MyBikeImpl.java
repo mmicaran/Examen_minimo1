@@ -2,10 +2,7 @@ package edu.upc.eetac.dsa;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class MyBikeImpl implements MyBike {
 
@@ -15,19 +12,13 @@ public class MyBikeImpl implements MyBike {
 
     protected int nStations;
     protected Station[] stations;
-    //!!!!!!
-    protected LinkedList<Bike> pedidos;
     //HashMap(key: string; value: User)
     protected HashMap<String, User> usuarios;
-    protected LinkedList<Bike> bicicletas;
 
     private MyBikeImpl(){
         nStations = 0;
         this.stations = new Station[10];
-        //!!!!!!
-        this.pedidos = new LinkedList<Pedido>();
         this.usuarios = new HashMap<>();
-        this.bicicletas = new LinkedList<>();
     }
 
     public static MyBike getInstance(){
@@ -49,8 +40,46 @@ public class MyBikeImpl implements MyBike {
 
     public void addUser(String idUser, String name, String surname){
         usuarios.put(idUser,new User(idUser,name,surname));
-        log.info("Usuario añadido: "+usuarios.get(idUser));
+        log.info("Usuario añadido: " + usuarios.get(idUser));
     }
+
+    public void addBike(String idBike, String description, double kms, String idStation) throws StationFullException, StationNotFoundException{
+
+        Bike b = new Bike(idBike,description,kms);
+        log.info("Bici creada: "+b);
+
+        int i;
+        boolean encontrado = false;
+
+        for(i = 0; i<nStations && !encontrado; i++){
+            if(idStation.equals(stations[i].getIdStation())){
+                encontrado = true;
+                log.info("Estacion encontrada");
+            }
+        }
+        if(!encontrado){
+            log.error("Estacion no encontrada");
+            throw new StationNotFoundException();
+        }else {
+            if(stations[i].getBicis().size() < stations[i].getMax() ){
+                stations[i].addBicis(b);
+                log.info("Bicis de estacion i: " + stations[i].getBicis());
+            }
+            else {
+                log.error("Estacion llena");
+                throw new StationFullException();
+            }
+        }
+
+    }
+
+    public List<Bike> bikesByStationOrderByKms(String idStation) throws StationNotFoundException {
+        int i;
+        boolean encontrado;
+        for(i =0;)
+    }
+
+
 
 
 }
