@@ -4,18 +4,20 @@ public class Bike {
     String idBike;
     String description;
     double kms;
+    String idStation;
 
 
     public Bike() {
     }
 
-    public Bike(String idBike, String description, double kms) {
+    public Bike(String idBike, String description, double kms, String idStation) {
         this.idBike = idBike;
         this.description = description;
         this.kms = kms;
+        this.idStation = idStation;
     }
 
-    public String getIdBike() {
+    public String getBikeId() {
         return idBike;
     }
 
@@ -39,14 +41,13 @@ public class Bike {
         this.kms = kms;
     }
 
-
-
     @Override
     public String toString() {
         return "Bike{" +
                 "idBike='" + idBike + '\'' +
                 ", description='" + description + '\'' +
                 ", kms=" + kms +
+                ", idStation='" + idStation + '\'' +
                 '}';
     }
 }

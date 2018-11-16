@@ -1,4 +1,4 @@
-git apackage edu.upc.eetac.dsa;
+package edu.upc.eetac.dsa;
 
 import org.junit.After;
 import org.junit.Assert;
