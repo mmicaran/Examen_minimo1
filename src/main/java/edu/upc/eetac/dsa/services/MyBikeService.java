@@ -34,10 +34,9 @@ public class MyBikeService {
         this.mb.addBike("bike201", "descripton", 1325.45, "Station2");
         this.mb.addBike("bike202", "descripton", 74430.3, "Station2");
         this.mb.addBike("bike203", "descripton", 1320.2, "Station2");
-
-
     }
 
+    //bikesByStationOrderByKms
     @GET
     @ApiOperation(value = "bikesByStationOrderByKms", notes = "asdasd")
     @ApiResponses(value = {
@@ -47,7 +46,7 @@ public class MyBikeService {
     })
     @Path("/{idStation}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTracks(@PathParam("idStation") String idStation)  {
+    public Response bikesByStationOrderByKms(@PathParam("idStation") String idStation)  {
 
         try {
             List<Bike> tracks = this.mb.bikesByStationOrderByKms(idStation);
@@ -60,61 +59,78 @@ public class MyBikeService {
 
     }
 
-    /*@GET
-    @ApiOperation(value = "get a Track", notes = "asdasd")
+    //getBikes
+    @GET
+    @ApiOperation(value = "Get Bike", notes = "asdasd")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response = Track.class),
+            @ApiResponse(code = 201, message = "Successful", response = Bike.class),
             @ApiResponse(code = 404, message = "Track not found")
+
     })
-    @Path("/{id}")
+    @Path("/{idStation}{userId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getTrack(@PathParam("id") int id) {
-        Track t = this.tm.getTrack(id);
-        if (t == null) return Response.status(404).build();
-        else  return Response.status(201).entity(t).build();
+    public Response getBike (@PathParam("idStation") String idStation, @PathParam("userId") String userId)  {
+        try {
+            Bike bike = this.mb.getBike(idStation,userId);
+            GenericEntity<Bike> entity = new GenericEntity<Bike>(bike) {};
+            return Response.status(201).entity(entity).build()  ;
+        }catch (UserNotFoundException e) {
+            return Response.status(404).build();
+        } catch (StationNotFoundException e) {
+            return Response.status(404).build();
+        }
+
+
     }
-
-    @DELETE
-    @ApiOperation(value = "delete a Track", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "Track not found")
-    })
-    @Path("/{id}")
-    public Response deleteTrack(@PathParam("id") int id) {
-        Track t = this.tm.getTrack(id);
-        if (t == null) return Response.status(404).build();
-        else this.tm.deleteTrack(id);
-        return Response.status(201).build();
-    }
-
-    @PUT
-    @ApiOperation(value = "update a Track", notes = "asdasd")
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful"),
-            @ApiResponse(code = 404, message = "Track not found")
-    })
-    @Path("/")
-    public Response updateTrack(Track track) {
-        Track t = this.tm.getTrack(track.getId());
-        if (t == null) return Response.status(404).build();
-        else this.tm.updateTrack(t);
-        return Response.status(201).build();
-    }
-
-
-
+    //addUser
     @POST
-    @ApiOperation(value = "create a new Track", notes = "asdasd")
+    @ApiOperation(value = "ADD USER", notes = "")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Successful", response=Track.class),
+            @ApiResponse(code = 201, message = "Successful")
     })
-
-    @Path("/")
+    @Path("/AddUser")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response newTrack(Track track) {
-        this.tm.addTrack(track);
-        return Response.status(201).entity(track).build();
-    }*/
+    public Response addUser(User u) {
+        String idUser = u.getIdUser();
+        String name = u.getName();
+        String surname = u.getSurname();
+        this.mb.addUser(idUser, name, surname);
+        return Response.status(201).build();
+    }
+
+    //addStation
+    @POST
+    @ApiOperation(value = "ADD STATION", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful")
+    })
+    @Path("/AddStation")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addStation(Station s) {
+        String idStation = s.getIdStation();
+        String description = s.getDescription();
+        int max = s.getMax();
+        double lat = s.getLat();
+        double lon = s.getLon();
+        this.mb.addStation(idStation,description,max,lat,lon);
+        return Response.status(201).build();
+    }
+
+    //addBike
+    @POST
+    @ApiOperation(value = "ADD BIKE", notes = "")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "Successful")
+    })
+    @Path("/AddBike")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addBike (Bike b) throws StationFullException, StationNotFoundException {
+        String idBike = b.getBikeId();
+        String description = b.getDescription();
+        double kms = b.getKms();
+        String idStation = b.getIdStation();
+        this.mb.addBike(idBike,description,kms,idStation);
+        return Response.status(201).build();
+    }
 
 }
